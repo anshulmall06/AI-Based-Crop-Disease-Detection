@@ -2,29 +2,31 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import api from "../../lib/api";
 
 export default function Login() {
   const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const login = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const login = async () => {
+    if (!email || !password) {
+      setError("Please enter email and password.");
+      return;
+    }
 
     try {
-      const res = await axios.post(
-        "http://127.0.0.1:8000/auth/login",
-        {
-          email,
-          password,
-        }
-      );
+      setLoading(true);
+      setError("");
 
-      console.log(res.data);
+      const res = await api.post("/auth/login", {
+        email,
+        password,
+      });
 
       localStorage.setItem(
         "token",
@@ -35,128 +37,101 @@ export default function Login() {
 
       router.push("/dashboard");
     } catch (err) {
-      console.log(err);
+      console.error(err);
 
-      alert(
-        err.response?.data?.detail ||
-        "Unable to login"
+      setError(
+        err?.response?.data?.detail ||
+          "Invalid email or password."
       );
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        background:
-          "linear-gradient(135deg,#2E7D32,#66BB6A,#A5D6A7)",
-      }}
-    >
-      <div
-        style={{
-          width: "400px",
-          background: "white",
-          padding: "40px",
-          borderRadius: "15px",
-          boxShadow: "0 10px 25px rgba(0,0,0,0.3)",
-        }}
-      >
-        <h1
-          style={{
-            textAlign: "center",
-            color: "#2E7D32",
-            marginBottom: "10px",
-          }}
-        >
-          AI Crop Disease
+    <div className="min-h-screen bg-gradient-to-r from-green-200 to-green-500 flex items-center justify-center p-6">
+
+      <div className="bg-white w-full max-w-md rounded-xl shadow-xl p-8">
+
+        <h1 className="text-4xl font-bold text-center text-green-700">
+
+          Login
+
         </h1>
 
-        <h3
-          style={{
-            textAlign: "center",
-            marginBottom: "30px",
-          }}
-        >
-          Login
-        </h3>
+        <p className="text-center text-gray-500 mt-2">
 
-        <form onSubmit={login}>
+          Sign in to your Crop Disease Detection account
+
+        </p>
+
+        {error && (
+
+          <div className="bg-red-100 text-red-700 mt-6 p-3 rounded-lg">
+
+            {error}
+
+          </div>
+
+        )}
+
+        <div className="mt-6">
+
+          <label className="block font-semibold mb-2">
+
+            Email
+
+          </label>
+
           <input
             type="email"
-            placeholder="Enter Email"
+            placeholder="Enter email"
             value={email}
             onChange={(e) =>
               setEmail(e.target.value)
             }
-            required
-            style={{
-              width: "100%",
-              padding: "12px",
-              marginBottom: "20px",
-              borderRadius: "8px",
-              border: "1px solid #ccc",
-            }}
+            className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-600"
           />
+
+        </div>
+
+        <div className="mt-5">
+
+          <label className="block font-semibold mb-2">
+
+            Password
+
+          </label>
 
           <input
             type="password"
-            placeholder="Enter Password"
+            placeholder="Enter password"
             value={password}
             onChange={(e) =>
               setPassword(e.target.value)
             }
-            required
-            style={{
-              width: "100%",
-              padding: "12px",
-              marginBottom: "20px",
-              borderRadius: "8px",
-              border: "1px solid #ccc",
-            }}
+            className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-600"
           />
 
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              width: "100%",
-              padding: "12px",
-              background: "#2E7D32",
-              color: "white",
-              border: "none",
-              borderRadius: "8px",
-              cursor: "pointer",
-              fontSize: "18px",
-            }}
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
+        </div>
 
-        <p
-          style={{
-            textAlign: "center",
-            marginTop: "20px",
-          }}
+        <button
+          onClick={login}
+          disabled={loading}
+          className="w-full mt-8 bg-green-700 hover:bg-green-800 text-white py-3 rounded-lg font-semibold transition"
         >
-          Don't have an account?{" "}
-          <span
-            style={{
-              color: "green",
-              cursor: "pointer",
-              fontWeight: "bold",
-            }}
-            onClick={() => router.push("/signup")}
-          >
-            Sign Up
-          </span>
-        </p>
+          {loading ? "Logging in..." : "Login"}
+        </button>
+
+        <button
+          onClick={() => router.push("/register")}
+          className="w-full mt-4 border border-green-700 text-green-700 py-3 rounded-lg hover:bg-green-50"
+        >
+          Create New Account
+        </button>
+
       </div>
+
     </div>
   );
 }

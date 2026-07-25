@@ -2,135 +2,102 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import api from "../../lib/api";
 
 export default function Dashboard() {
   const router = useRouter();
 
-  const [history, setHistory] = useState([]);
   const [user, setUser] = useState(null);
+  const [predictions, setPredictions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const [editingId, setEditingId] = useState(null);
+
+  const [editForm, setEditForm] = useState({
+    disease: "",
+    confidence: "",
+  });
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      router.push("/login");
-      return;
-    }
-
-    verifyUser(token);
+    checkLogin();
   }, []);
 
-  const verifyUser = async (token) => {
+  const checkLogin = async () => {
     try {
-      const res = await fetch(
-        "http://127.0.0.1:8000/auth/profile",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const profile = await api.get("/auth/profile");
 
-      if (!res.ok) {
-        throw new Error("Unauthorized");
-      }
+      setUser(profile.data.user);
 
-      const data = await res.json();
-
-      setUser(data.user);
-
-      loadHistory();
+      loadPredictions();
     } catch (err) {
-      console.log(err);
-
       localStorage.removeItem("token");
-
       router.push("/login");
     }
   };
 
-  const loadHistory = async () => {
+  const loadPredictions = async () => {
     try {
-      const token = localStorage.getItem("token");
+      setLoading(true);
 
-      const res = await fetch(
-        "http://127.0.0.1:8000/predictions",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await api.get("/predictions");
 
-      if (!res.ok) {
-        throw new Error("Unable to load history");
-      }
+      setPredictions(res.data);
 
-      const data = await res.json();
-
-      setHistory(data);
+      setError("");
     } catch (err) {
       console.log(err);
+
+      setError("Unable to load prediction history.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const startEdit = (item) => {
+    setEditingId(item._id);
+
+    setEditForm({
+      disease: item.disease,
+      confidence: item.confidence,
+    });
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+
+    setEditForm({
+      disease: "",
+      confidence: "",
+    });
+  };
+
+  const saveEdit = async (id) => {
+    try {
+      await api.put(`/predictions/${id}`, {
+        disease: editForm.disease,
+        confidence: Number(editForm.confidence),
+      });
+
+      await loadPredictions();
+
+      setEditingId(null);
+    } catch (err) {
+      alert("Failed to update prediction.");
     }
   };
 
   const deletePrediction = async (id) => {
+    if (!confirm("Delete this prediction?")) return;
+
     try {
-      const token = localStorage.getItem("token");
+      await api.delete(`/predictions/${id}`);
 
-      await fetch(
-        `http://127.0.0.1:8000/predictions/${id}`,
-        {
-          method: "DELETE",
-
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      loadHistory();
+      loadPredictions();
     } catch (err) {
-      console.log(err);
+      alert("Unable to delete prediction.");
     }
-  };
-
-  const editPrediction = async (item) => {
-    const disease = prompt(
-      "Edit Disease",
-      item.disease
-    );
-
-    if (!disease) return;
-
-    const confidence = prompt(
-      "Edit Confidence",
-      item.confidence
-    );
-
-    if (!confidence) return;
-
-    const token = localStorage.getItem("token");
-
-    await fetch(
-      `http://127.0.0.1:8000/predictions/${item._id}`,
-      {
-        method: "PUT",
-
-        headers: {
-          "Content-Type": "application/json",
-
-          Authorization: `Bearer ${token}`,
-        },
-
-        body: JSON.stringify({
-          disease,
-          confidence,
-        }),
-      }
-    );
-
-    loadHistory();
   };
 
   const logout = () => {
@@ -139,201 +106,268 @@ export default function Dashboard() {
     router.push("/login");
   };
 
+  const totalPredictions = predictions.length;
+
   const averageConfidence =
-    history.length > 0
+    predictions.length > 0
       ? (
-          history.reduce(
-            (sum, item) =>
-              sum + Number(item.confidence),
+          predictions.reduce(
+            (sum, item) => sum + Number(item.confidence),
             0
-          ) / history.length
+          ) / predictions.length
         ).toFixed(2)
       : 0;
 
+  const latestPrediction =
+    predictions.length > 0
+      ? predictions[0].disease
+      : "No Prediction";
+
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div className="min-h-screen bg-gray-100">
 
-      <div className="flex justify-between items-center mb-8">
+      <nav className="bg-green-700 text-white px-8 py-4 flex justify-between items-center">
 
-        <div>
+        <h1 className="text-3xl font-bold">
+          🌱 Crop Disease Detection
+        </h1>
 
-          <h1 className="text-4xl font-bold">
-            Dashboard
-          </h1>
+        <div className="flex gap-6 items-center">
 
-          <p className="text-gray-600 mt-2">
+          <Link href="/">Home</Link>
 
-            Welcome {user?.sub}
+          <Link href="/history">History</Link>
 
-          </p>
-
-        </div>
-
-        <button
-          onClick={logout}
-          className="bg-red-600 text-white px-5 py-2 rounded-lg hover:bg-red-700"
-        >
-          Logout
-        </button>
-
-      </div>
-
-      <div className="grid md:grid-cols-3 gap-6 mb-8">
-
-        <div className="bg-green-600 text-white p-6 rounded-xl">
-
-          <h2 className="text-xl font-bold">
-            Total Predictions
-          </h2>
-
-          <p className="text-5xl mt-4">
-            {history.length}
-          </p>
+          <button
+            onClick={logout}
+            className="bg-red-600 px-4 py-2 rounded-lg hover:bg-red-700"
+          >
+            Logout
+          </button>
 
         </div>
 
-        <div className="bg-blue-600 text-white p-6 rounded-xl">
+      </nav>
 
-          <h2 className="text-xl font-bold">
+      <div className="max-w-7xl mx-auto p-8">
 
-            Latest Prediction
-
-          </h2>
-
-          <p className="text-2xl mt-4">
-
-            {history.length
-              ? history[0].disease
-              : "No Prediction"}
-
-          </p>
-
-        </div>
-
-        <div className="bg-orange-500 text-white p-6 rounded-xl">
-
-          <h2 className="text-xl font-bold">
-
-            Average Confidence
-
-          </h2>
-
-          <p className="text-5xl mt-4">
-
-            {averageConfidence}%
-
-          </p>
-
-        </div>
-
-      </div>
-
-      <div className="bg-white rounded-xl shadow p-6">
-
-        <h2 className="text-2xl font-bold mb-6">
-
-          Prediction History
-
+        <h2 className="text-4xl font-bold mb-2">
+          Dashboard
         </h2>
 
-        <table className="w-full border">
+        <p className="text-gray-600 mb-8">
+          Welcome {user?.sub}
+        </p>
 
-          <thead>
+        <div className="grid md:grid-cols-3 gap-6 mb-8">
 
-            <tr className="bg-gray-200">
+          <div className="bg-green-600 text-white rounded-xl p-6 shadow">
 
-              <th className="border p-3">
-                Disease
-              </th>
+            <h3 className="text-xl font-semibold">
+              Total Predictions
+            </h3>
 
-              <th className="border p-3">
-                Confidence
-              </th>
+            <p className="text-5xl font-bold mt-4">
+              {totalPredictions}
+            </p>
 
-              <th className="border p-3">
-                File
-              </th>
+          </div>
 
-              <th className="border p-3">
-                Actions
-              </th>
+          <div className="bg-blue-600 text-white rounded-xl p-6 shadow">
 
-            </tr>
+            <h3 className="text-xl font-semibold">
+              Latest Prediction
+            </h3>
 
-          </thead>
+            <p className="text-2xl mt-4">
+              {latestPrediction}
+            </p>
 
-          <tbody>
+          </div>
 
-            {history.length > 0 ? (
+          <div className="bg-orange-500 text-white rounded-xl p-6 shadow">
 
-              history.map((item) => (
+            <h3 className="text-xl font-semibold">
+              Average Confidence
+            </h3>
 
-                <tr key={item._id}>
+            <p className="text-5xl font-bold mt-4">
+              {averageConfidence}%
+            </p>
 
-                  <td className="border p-3">
+          </div>
 
-                    {item.disease}
+        </div>
+                {error && (
+          <div className="bg-red-100 text-red-700 p-4 rounded-lg mb-6">
+            {error}
+          </div>
+        )}
 
-                  </td>
+        {loading ? (
 
-                  <td className="border p-3">
+          <div className="bg-white rounded-xl shadow p-8 text-center">
+            Loading prediction history...
+          </div>
 
-                    {item.confidence}%
+        ) : predictions.length === 0 ? (
 
-                  </td>
+          <div className="bg-white rounded-xl shadow p-8 text-center">
 
-                  <td className="border p-3">
+            <h2 className="text-2xl font-bold mb-3">
+              No Predictions Yet
+            </h2>
 
-                    {item.filename}
+            <p className="text-gray-600">
+              Upload a crop image to generate your first prediction.
+            </p>
 
-                  </td>
+          </div>
 
-                  <td className="border p-3">
+        ) : (
 
-                    <button
-                      onClick={() =>
-                        editPrediction(item)
-                      }
-                      className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
-                    >
-                      Edit
-                    </button>
+          <div className="bg-white rounded-xl shadow-lg overflow-x-auto">
 
-                    <button
-                      onClick={() =>
-                        deletePrediction(item._id)
-                      }
-                      className="bg-red-600 text-white px-4 py-2 rounded"
-                    >
-                      Delete
-                    </button>
+            <table className="w-full">
 
-                  </td>
+              <thead>
+
+                <tr className="bg-green-700 text-white">
+
+                  <th className="p-4 text-left">Disease</th>
+
+                  <th className="p-4 text-left">Confidence</th>
+
+                  <th className="p-4 text-left">File</th>
+
+                  <th className="p-4 text-center">Actions</th>
 
                 </tr>
 
-              ))
+              </thead>
 
-            ) : (
+              <tbody>
 
-              <tr>
+                {predictions.map((item) => (
 
-                <td
-                  colSpan="4"
-                  className="text-center p-6"
-                >
-                  No Prediction History
-                </td>
+                  <tr
+                    key={item._id}
+                    className="border-b hover:bg-gray-50"
+                  >
 
-              </tr>
+                    {editingId === item._id ? (
 
-            )}
+                      <>
+                        <td className="p-4">
 
-          </tbody>
+                          <input
+                            type="text"
+                            value={editForm.disease}
+                            onChange={(e) =>
+                              setEditForm({
+                                ...editForm,
+                                disease: e.target.value,
+                              })
+                            }
+                            className="border rounded-lg p-2 w-full"
+                          />
 
-        </table>
+                        </td>
+
+                        <td className="p-4">
+
+                          <input
+                            type="number"
+                            value={editForm.confidence}
+                            onChange={(e) =>
+                              setEditForm({
+                                ...editForm,
+                                confidence: e.target.value,
+                              })
+                            }
+                            className="border rounded-lg p-2 w-full"
+                          />
+
+                        </td>
+
+                        <td className="p-4">
+                          {item.filename}
+                        </td>
+
+                        <td className="p-4 text-center space-x-2">
+
+                          <button
+                            onClick={() => saveEdit(item._id)}
+                            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+                          >
+                            Save
+                          </button>
+
+                          <button
+                            onClick={cancelEdit}
+                            className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
+                          >
+                            Cancel
+                          </button>
+
+                        </td>
+
+                      </>
+                                          ) : (
+
+                      <>
+
+                        <td className="p-4">
+                          {item.disease}
+                        </td>
+
+                        <td className="p-4">
+                          {item.confidence}%
+                        </td>
+
+                        <td className="p-4">
+                          {item.filename}
+                        </td>
+
+                        <td className="p-4 text-center space-x-2">
+
+                          <button
+                            onClick={() => startEdit(item)}
+                            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                          >
+                            Edit
+                          </button>
+
+                          <button
+                            onClick={() => deletePrediction(item._id)}
+                            className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+                          >
+                            Delete
+                          </button>
+
+                        </td>
+
+                      </>
+
+                    )}
+
+                  </tr>
+
+                ))}
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        )}
 
       </div>
+
+      <footer className="bg-green-700 text-white text-center py-4 mt-10">
+        © 2026 AI Crop Disease Detection System
+      </footer>
 
     </div>
   );
