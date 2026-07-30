@@ -98,3 +98,4 @@ Farmer Tips:
 Monitor crop health weekly and apply recommended fungicides if symptoms spread.
 """
         )
+    
