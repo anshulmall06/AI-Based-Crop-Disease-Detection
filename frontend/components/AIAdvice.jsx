@@ -13,12 +13,14 @@ export default function AIAdvice({ disease, confidence }) {
     setAdvice("");
     setError("");
 
-    const response = await api.post("/ai/explain", {
-  disease,
-});
+    try {
+      const response = await api.post("/ai/explain", {
+        disease,
+      });
 
       setAdvice(response.data.answer);
     } catch (err) {
+      console.error(err);
       setError("Failed to generate AI advice.");
     } finally {
       setLoading(false);
@@ -27,13 +29,11 @@ export default function AIAdvice({ disease, confidence }) {
 
   return (
     <div className="mt-8 bg-green-50 rounded-xl shadow-lg border border-green-300 p-6">
-
       <h2 className="text-3xl font-bold text-green-700 mb-4">
         🌿 AI Crop Advisor
       </h2>
 
       <div className="grid md:grid-cols-2 gap-4 mb-6">
-
         <div className="bg-white shadow rounded-lg p-4">
           <h3 className="font-bold text-green-700">Disease</h3>
           <p>{disease}</p>
@@ -43,37 +43,33 @@ export default function AIAdvice({ disease, confidence }) {
           <h3 className="font-bold text-green-700">Confidence</h3>
           <p>{confidence}%</p>
         </div>
-
       </div>
 
       <button
         onClick={getAIAdvice}
-        className="bg-green-700 hover:bg-green-800 text-white px-6 py-3 rounded-lg"
+        disabled={loading}
+        className="bg-green-700 hover:bg-green-800 disabled:bg-gray-500 text-white px-6 py-3 rounded-lg"
       >
-        🤖 Get AI Advice
+        {loading ? "Generating..." : "🤖 Get AI Advice"}
       </button>
 
       {loading && (
-  <div className="mt-6 bg-blue-50 border border-blue-300 rounded-xl p-5 shadow">
+        <div className="mt-6 bg-blue-50 border border-blue-300 rounded-xl p-5 shadow">
+          <div className="flex items-center gap-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-4 border-green-200 border-t-green-600"></div>
 
-    <div className="flex items-center gap-4">
+            <div>
+              <p className="text-lg font-semibold text-green-700">
+                🤖 AI is analyzing your crop...
+              </p>
 
-      <div className="animate-spin rounded-full h-8 w-8 border-4 border-green-200 border-t-green-600"></div>
-
-      <div>
-        <p className="text-lg font-semibold text-green-700">
-          🤖 AI is analyzing your crop...
-        </p>
-
-        <p className="text-gray-600">
-          Generating disease description, treatment and prevention tips...
-        </p>
-      </div>
-
-    </div>
-
-  </div>
-)}
+              <p className="text-gray-600">
+                Generating disease description, treatment and prevention tips...
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {error && (
         <div className="mt-6 text-red-600 font-semibold">
@@ -83,7 +79,6 @@ export default function AIAdvice({ disease, confidence }) {
 
       {advice && (
         <div className="mt-8">
-
           <h2 className="text-2xl font-bold mb-5">
             🌾 AI Analysis Report
           </h2>
@@ -93,10 +88,8 @@ export default function AIAdvice({ disease, confidence }) {
               {advice}
             </pre>
           </div>
-
         </div>
       )}
-
     </div>
   );
 }
