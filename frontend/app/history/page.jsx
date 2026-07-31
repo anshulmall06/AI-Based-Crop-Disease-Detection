@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import api from "../../lib/api";
 import Link from "next/link";
 
-const API = const API = process.env.NEXT_PUBLIC_API_URL;
+const API = "https://ai-based-crop-disease-detection-3.onrender.com";
 
 export default function History() {
 
