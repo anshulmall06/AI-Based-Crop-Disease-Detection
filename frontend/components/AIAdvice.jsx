@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import axios from "axios";
+import api from "../lib/api";
 
 export default function AIAdvice({ disease, confidence }) {
   const [loading, setLoading] = useState(false);
@@ -13,13 +13,9 @@ export default function AIAdvice({ disease, confidence }) {
     setAdvice("");
     setError("");
 
-    try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/ai/explain",
-        {
-          disease: disease,
-        }
-      );
+    const response = await api.post("/ai/explain", {
+  disease,
+});
 
       setAdvice(response.data.answer);
     } catch (err) {
