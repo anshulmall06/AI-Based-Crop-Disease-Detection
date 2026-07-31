@@ -1,18 +1,21 @@
 # 🌱 AI Based Crop Disease Detection System
 
-An AI-powered web application that helps farmers identify crop diseases by uploading images of plant leaves. The system predicts the disease using AI, provides confidence scores, stores prediction history, and generates treatment and prevention recommendations using Google's Gemini AI.
+An AI-powered web application that helps farmers identify crop diseases by uploading images of plant leaves. The system predicts crop diseases, displays confidence scores, stores prediction history, and generates treatment and prevention recommendations using **Google Gemini AI**.
 
 ---
 
 # 🚀 Live Demo
 
-### 🌐 Frontend (Vercel)
+## 🌐 Frontend (Vercel)
+
 https://ai-based-crop-disease-detection-drab.vercel.app/
 
-### ⚙️ Backend API (Render)
+## ⚙️ Backend API (Render)
+
 https://ai-based-crop-disease-detection-3.onrender.com
 
-### 📖 API Documentation
+## 📖 API Documentation (Swagger)
+
 https://ai-based-crop-disease-detection-3.onrender.com/docs
 
 ---
@@ -22,16 +25,16 @@ https://ai-based-crop-disease-detection-3.onrender.com/docs
 - 🌿 Upload crop leaf images
 - 🤖 AI-powered crop disease prediction
 - 📊 Confidence score display
-- 🧠 Gemini AI crop advisor
+- 🧠 Google Gemini AI crop advisor
 - 💊 Disease description
 - 🌱 Treatment recommendations
 - 🛡 Prevention methods
 - 👨‍🌾 Farmer tips
 - 🔐 JWT Authentication
 - 👤 User Registration & Login
-- 📜 Prediction history
+- 📜 Prediction History (CRUD)
 - 📈 Dashboard
-- 💾 MongoDB database integration
+- 💾 MongoDB Atlas integration
 - 🌍 Responsive UI
 - ⚡ FastAPI REST APIs
 
@@ -52,9 +55,9 @@ https://ai-based-crop-disease-detection-3.onrender.com/docs
 
 - FastAPI
 - Python
+- Uvicorn
 - JWT Authentication
 - Pydantic
-- Uvicorn
 
 ## Database
 
@@ -69,7 +72,7 @@ https://ai-based-crop-disease-detection-3.onrender.com/docs
 
 # 📁 Project Structure
 
-```
+```text
 AI-Based-Crop-Disease-Detection/
 │
 ├── backend/
@@ -126,19 +129,19 @@ python -m venv venv
 venv\Scripts\activate
 ```
 
-### Install dependencies
+### Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Start Backend
+### Run Backend
 
 ```bash
 uvicorn app:app --reload
 ```
 
-Backend will run at
+Backend runs at:
 
 ```
 http://127.0.0.1:8000
@@ -156,7 +159,7 @@ npm install
 npm run dev
 ```
 
-Frontend will run at
+Frontend runs at:
 
 ```
 http://localhost:3000
@@ -183,7 +186,7 @@ GEMINI_API_KEY=your_google_gemini_api_key
 ## Authentication
 
 | Method | Endpoint | Description |
-|----------|----------------|----------------|
+|---------|----------|-------------|
 | POST | `/auth/register` | Register User |
 | POST | `/auth/login` | Login User |
 
@@ -192,25 +195,25 @@ GEMINI_API_KEY=your_google_gemini_api_key
 ## Disease Prediction
 
 | Method | Endpoint | Description |
-|----------|----------------|----------------|
-| POST | `/predict` | Predict Disease |
+|---------|----------|-------------|
+| POST | `/predict` | Predict Crop Disease |
 
 ---
 
 ## AI Crop Advisor
 
 | Method | Endpoint | Description |
-|----------|----------------|----------------|
-| POST | `/ai/explain` | Generate AI Advice |
+|---------|----------|-------------|
+| POST | `/ai/explain` | Generate AI Advice using Gemini |
 
 ---
 
 ## Prediction History
 
 | Method | Endpoint | Description |
-|----------|----------------|----------------|
-| GET | `/predictions` | Get Prediction History |
-| GET | `/predictions/{id}` | Get Prediction |
+|---------|----------|-------------|
+| GET | `/predictions` | Get All Predictions |
+| GET | `/predictions/{id}` | Get Prediction by ID |
 | PUT | `/predictions/{id}` | Update Prediction |
 | DELETE | `/predictions/{id}` | Delete Prediction |
 
@@ -218,52 +221,95 @@ GEMINI_API_KEY=your_google_gemini_api_key
 
 # Application Workflow
 
-1. User registers an account.
-2. User logs into the application.
-3. User uploads a crop leaf image.
-4. Backend predicts the disease.
-5. Disease name and confidence score are displayed.
-6. User clicks **Get AI Advice**.
-7. Gemini AI generates:
+1. Register a new account.
+2. Login securely using JWT Authentication.
+3. Upload a crop leaf image.
+4. AI predicts the crop disease.
+5. Confidence score is displayed.
+6. Click **Get AI Advice**.
+7. Google Gemini AI generates:
    - Disease Description
    - Causes
    - Treatment
    - Prevention
    - Farmer Tips
 8. Prediction is saved to MongoDB.
-9. User can view prediction history and dashboard.
+9. View previous predictions in History and Dashboard.
 
 ---
 
-# Deployment
+# 🌐 Deployment
+
+## Live Frontend
+
+**Platform:** Vercel
+
+https://ai-based-crop-disease-detection-drab.vercel.app/
+
+---
+
+## Live Backend
+
+**Platform:** Render
+
+https://ai-based-crop-disease-detection-3.onrender.com
+
+---
+
+## API Documentation
+
+https://ai-based-crop-disease-detection-3.onrender.com/docs
+
+---
+
+# 📋 Deployment Summary
 
 ## Frontend
 
 - Vercel
+- Next.js
+- React
+- JavaScript
 
 ## Backend
 
 - Render
+- FastAPI
+- Python
 
 ## Database
 
 - MongoDB Atlas
 
+## AI Service
+
+- Google Gemini AI
+
 ---
 
-# Future Enhancements
+# ⚠️ Known Limitations (Free Tier)
+
+- The backend is deployed on the **Render Free Tier**.
+- After approximately **15 minutes of inactivity**, Render may automatically put the backend service to sleep.
+- The **first request after inactivity** may take **30–60 seconds** while the server wakes up.
+- Once the backend is active, all application features work normally.
+- AI advice requires an active internet connection to communicate with Google Gemini AI.
+
+---
+
+# 🚀 Future Enhancements
 
 - 📱 Mobile Application
 - 🌍 Multi-language Support
-- 📷 Live Camera Detection
+- 📷 Live Camera Disease Detection
 - 📈 Analytics Dashboard
-- 🌾 Support for More Crop Types
+- 🌾 Support for More Crop Species
 - ☁ Cloud Storage Integration
 - 🔔 Disease Alert Notifications
 
 ---
 
-# Screenshots
+# 📷 Screenshots
 
 ## Home Page
 
@@ -287,7 +333,7 @@ GEMINI_API_KEY=your_google_gemini_api_key
 
 ---
 
-# Author
+# 👨‍💻 Author
 
 **Anshul**
 
@@ -295,19 +341,19 @@ MCA Student
 
 Graphic Era University
 
-GitHub
+GitHub:
 
 https://github.com/anshulmall06
 
 ---
 
-# License
+# 📄 License
 
 This project was developed for educational and internship purposes.
 
 ---
 
-# Acknowledgements
+# 🙏 Acknowledgements
 
 - FastAPI
 - Next.js
@@ -315,3 +361,4 @@ This project was developed for educational and internship purposes.
 - Google Gemini AI
 - Render
 - Vercel
+- Axios
