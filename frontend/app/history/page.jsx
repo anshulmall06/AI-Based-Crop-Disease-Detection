@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import api from "../../lib/api";
 import Link from "next/link";
 
-const API = "http://127.0.0.1:8000";
+const API = const API = process.env.NEXT_PUBLIC_API_URL;
 
 export default function History() {
 
