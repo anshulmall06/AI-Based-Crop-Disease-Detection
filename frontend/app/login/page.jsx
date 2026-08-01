@@ -124,7 +124,7 @@ export default function Login() {
         </button>
 
         <button
-          onClick={() => router.push("/register")}
+          onClick={() => router.push("/signup")}
           className="w-full mt-4 border border-green-700 text-green-700 py-3 rounded-lg hover:bg-green-50"
         >
           Create New Account
