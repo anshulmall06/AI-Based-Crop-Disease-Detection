@@ -107,13 +107,14 @@ AI-Based-Crop-Disease-Detection/
 
 ## Clone Repository
 
+
 ```bash
 git clone https://github.com/anshulmall06/AI-Based-Crop-Disease-Detection.git
-
-cd AI-Based-Crop-Disease-Detection
 ```
 
----
+```bash
+cd AI-Based-Crop-Disease-Detection
+```
 
 # Backend Setup
 
