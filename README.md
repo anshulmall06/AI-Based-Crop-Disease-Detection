@@ -309,29 +309,6 @@ https://ai-based-crop-disease-detection-3.onrender.com/docs
 
 ---
 
-# 📷 Screenshots
-
-## Home Page
-
-- Upload Crop Leaf Image
-- Disease Prediction
-
-## AI Crop Advisor
-
-- Disease Description
-- Treatment
-- Prevention
-- Farmer Tips
-
-## Dashboard
-
-- Prediction Statistics
-
-## History
-
-- Previous Predictions
-
----
 
 # 👨‍💻 Author
 
