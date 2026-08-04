@@ -16,7 +16,7 @@ router = APIRouter()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-MODEL_PATH = os.path.join(BASE_DIR, "ml_model", "crop_disease_model.keras")
+MODEL_PATH = os.path.join(BASE_DIR, "ml_model", "crop_disease_model.h5")
 CLASS_PATH = os.path.join(BASE_DIR, "ml_model", "class_names.json")
 
 try:
