@@ -1,9 +1,21 @@
 from fastapi import APIRouter, UploadFile, File, Depends
 from database.database import prediction_collection
 from middleware.auth_middleware import verify_token
-import random
+
+import tensorflow as tf
+import numpy as np
+from PIL import Image
+import json
 
 router = APIRouter()
+
+# Load model only once
+model = tf.keras.models.load_model("ml_model/crop_disease_model.keras")
+
+# Load class names
+with open("ml_model/class_names.json", "r") as f:
+    class_names = json.load(f)
+
 
 @router.post("/predict")
 async def predict(
@@ -11,26 +23,39 @@ async def predict(
     user=Depends(verify_token)
 ):
 
-    diseases = [
-        "Tomato Early Blight",
-        "Tomato Late Blight",
-        "Potato Healthy",
-        "Potato Early Blight",
-        "Leaf Mold"
-    ]
+    # Read uploaded image
+    image = Image.open(file.file).convert("RGB")
 
-    disease = random.choice(diseases)
-    confidence = round(random.uniform(85, 99), 2)
+    # Resize to training size
+    image = image.resize((180, 180))
 
-    prediction = {
+    # Convert to NumPy array
+    image = np.array(image)
+
+    # Normalize
+    image = image / 255.0
+
+    # Add batch dimension
+    image = np.expand_dims(image, axis=0)
+
+    # Prediction
+    prediction = model.predict(image)
+
+    predicted_index = np.argmax(prediction)
+
+    confidence = float(np.max(prediction) * 100)
+
+    disease = class_names[predicted_index]
+
+    prediction_data = {
         "email": user["sub"],
         "filename": file.filename,
         "disease": disease,
-        "confidence": confidence
+        "confidence": round(confidence, 2)
     }
 
-    result = prediction_collection.insert_one(prediction)
+    result = prediction_collection.insert_one(prediction_data)
 
-    prediction["_id"] = str(result.inserted_id)
+    prediction_data["_id"] = str(result.inserted_id)
 
-    return prediction
+    return prediction_data
