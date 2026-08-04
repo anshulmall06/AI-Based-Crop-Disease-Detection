@@ -17,6 +17,11 @@ frontend/.env
 __pycache__/
 *.pyc
 venv/
+backend/venv311/
+
+# AI Models
+backend/ml/*.keras
+backend/ml/*.h5
 
 # Logs
 *.log
