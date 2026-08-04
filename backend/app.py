@@ -28,7 +28,7 @@ app.include_router(ai_router)
 
 
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 def home():
     return {
         "message": "AI Crop Disease Detection API Running Successfully"
