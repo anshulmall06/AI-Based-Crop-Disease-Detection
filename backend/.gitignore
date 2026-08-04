@@ -1,0 +1,12 @@
+# Ignore dataset folder outside backend
+/dataset/
+
+# Ignore virtual environment
+/ml_env/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment variables
+.env
