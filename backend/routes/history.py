@@ -15,7 +15,9 @@ async def get_predictions(user=Depends(verify_token)):
 
     predictions = []
 
-    for prediction in prediction_collection.find():
+    for prediction in prediction_collection.find(
+        {"email": user["sub"]}
+    ):
 
         prediction["_id"] = str(prediction["_id"])
 
@@ -42,7 +44,10 @@ async def get_prediction(
         )
 
     prediction = prediction_collection.find_one(
-        {"_id": object_id}
+        {
+            "_id": object_id,
+            "email": user["sub"]
+        }
     )
 
     if prediction is None:
@@ -77,8 +82,13 @@ async def update_prediction(
     data.pop("_id", None)
 
     result = prediction_collection.update_one(
-        {"_id": object_id},
-        {"$set": data}
+        {
+            "_id": object_id,
+            "email": user["sub"]
+        },
+        {
+            "$set": data
+        }
     )
 
     if result.matched_count == 0:
@@ -111,7 +121,10 @@ async def delete_prediction(
         )
 
     result = prediction_collection.delete_one(
-        {"_id": object_id}
+        {
+            "_id": object_id,
+            "email": user["sub"]
+        }
     )
 
     if result.deleted_count == 0:

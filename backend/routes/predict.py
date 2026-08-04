@@ -5,11 +5,10 @@ import random
 
 router = APIRouter()
 
-
 @router.post("/predict")
 async def predict(
     file: UploadFile = File(...),
-    
+    user=Depends(verify_token)
 ):
 
     diseases = [
@@ -21,11 +20,10 @@ async def predict(
     ]
 
     disease = random.choice(diseases)
-
     confidence = round(random.uniform(85, 99), 2)
 
     prediction = {
-        
+        "email": user["sub"],
         "filename": file.filename,
         "disease": disease,
         "confidence": confidence
