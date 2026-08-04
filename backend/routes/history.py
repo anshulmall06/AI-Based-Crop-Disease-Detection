@@ -1,138 +1,96 @@
-from fastapi import APIRouter, HTTPException, Body, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from bson import ObjectId
-from bson.errors import InvalidId
 
 from database.database import prediction_collection
 from middleware.auth_middleware import verify_token
 
+
 router = APIRouter()
 
 
-# ---------------- GET ALL PREDICTIONS ---------------- #
-
+# Get only logged-in user's predictions
 @router.get("/predictions")
-async def get_predictions(user=Depends(verify_token)):
+async def get_predictions(
+    user=Depends(verify_token)
+):
+
+    user_email = user["sub"]
 
     predictions = []
 
-    for prediction in prediction_collection.find(
-        {"email": user["sub"]}
-    ):
+    cursor = prediction_collection.find(
+        {
+            "email": user_email
+        }
+    ).sort("_id", -1)
 
-        prediction["_id"] = str(prediction["_id"])
 
-        predictions.append(prediction)
+    for item in cursor:
+
+        item["_id"] = str(item["_id"])
+        predictions.append(item)
+
 
     return predictions
 
 
-# ---------------- GET SINGLE PREDICTION ---------------- #
 
-@router.get("/predictions/{id}")
-async def get_prediction(
-    id: str,
-    user=Depends(verify_token)
-):
-
-    try:
-        object_id = ObjectId(id)
-
-    except InvalidId:
-        raise HTTPException(
-            status_code=400,
-            detail="Invalid ID"
-        )
-
-    prediction = prediction_collection.find_one(
-        {
-            "_id": object_id,
-            "email": user["sub"]
-        }
-    )
-
-    if prediction is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Prediction not found"
-        )
-
-    prediction["_id"] = str(prediction["_id"])
-
-    return prediction
-
-
-# ---------------- UPDATE ---------------- #
-
-@router.put("/predictions/{id}")
+# Update only user's own prediction
+@router.put("/predictions/{prediction_id}")
 async def update_prediction(
-    id: str,
-    data: dict = Body(...),
+    prediction_id: str,
+    data: dict,
     user=Depends(verify_token)
 ):
-
-    try:
-        object_id = ObjectId(id)
-
-    except InvalidId:
-        raise HTTPException(
-            status_code=400,
-            detail="Invalid ID"
-        )
-
-    data.pop("_id", None)
 
     result = prediction_collection.update_one(
         {
-            "_id": object_id,
+            "_id": ObjectId(prediction_id),
             "email": user["sub"]
         },
         {
-            "$set": data
+            "$set": {
+                "disease": data["disease"],
+                "confidence": data["confidence"]
+            }
         }
     )
 
-    if result.matched_count == 0:
 
+    if result.modified_count == 0:
         raise HTTPException(
             status_code=404,
             detail="Prediction not found"
         )
+
 
     return {
         "message": "Prediction updated successfully"
     }
 
 
-# ---------------- DELETE ---------------- #
 
-@router.delete("/predictions/{id}")
+# Delete only user's own prediction
+@router.delete("/predictions/{prediction_id}")
 async def delete_prediction(
-    id: str,
+    prediction_id: str,
     user=Depends(verify_token)
 ):
 
-    try:
-        object_id = ObjectId(id)
-
-    except InvalidId:
-        raise HTTPException(
-            status_code=400,
-            detail="Invalid ID"
-        )
-
     result = prediction_collection.delete_one(
         {
-            "_id": object_id,
+            "_id": ObjectId(prediction_id),
             "email": user["sub"]
         }
     )
 
-    if result.deleted_count == 0:
 
+    if result.deleted_count == 0:
         raise HTTPException(
             status_code=404,
             detail="Prediction not found"
         )
+
 
     return {
         "message": "Prediction deleted successfully"
