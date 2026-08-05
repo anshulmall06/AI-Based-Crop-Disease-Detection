@@ -24,9 +24,10 @@ https://ai-based-crop-disease-detection-3.onrender.com/docs
 
 # 📸 Application Screenshots
 
-## 🏠 Home Page
 
-![Home Screenshot](screenshots/home.png)
+## 🔐 Login Page
+
+![Login Screenshot](screenshots/login.png)
 
 
 ## 🌿 Disease Prediction
@@ -38,6 +39,7 @@ https://ai-based-crop-disease-detection-3.onrender.com/docs
 
 ![Dashboard Screenshot](screenshots/dashboard.png)
 
+
 ---
 
 # ✨ Features
@@ -47,8 +49,9 @@ https://ai-based-crop-disease-detection-3.onrender.com/docs
 - Upload crop leaf images
 - Detect plant diseases using Deep Learning
 - ONNX Runtime based inference
-- Display disease name
-- Display prediction confidence score
+- Display predicted disease name
+- Display confidence percentage
+
 
 ---
 
@@ -60,7 +63,8 @@ Integrated with Google Gemini AI:
 - Disease causes
 - Treatment recommendations
 - Prevention methods
-- Farmer tips
+- Farmer guidance
+
 
 ---
 
@@ -68,9 +72,10 @@ Integrated with Google Gemini AI:
 
 - User registration
 - Secure login
-- JWT based authentication
+- JWT authentication
 - Protected API routes
-- Token based authorization
+- Token-based authorization
+
 
 ---
 
@@ -80,6 +85,7 @@ Integrated with Google Gemini AI:
 - Average confidence score
 - Latest prediction
 - Prediction management
+
 
 ---
 
@@ -91,15 +97,17 @@ Users can:
 - Update prediction records
 - Delete prediction records
 
+
 ---
 
 ## 💾 Database Integration
 
 Using MongoDB Atlas:
 
-- User data storage
+- User information storage
 - Prediction history storage
-- Secure cloud database
+- Cloud database integration
+
 
 ---
 
@@ -110,9 +118,11 @@ Using MongoDB Atlas:
 - Modern dashboard interface
 - Mobile-friendly design
 
+
 ---
 
 # 🛠 Tech Stack
+
 
 ## Frontend
 
@@ -124,7 +134,6 @@ Using MongoDB Atlas:
 - Tailwind CSS
 - Axios
 
----
 
 ## Backend
 
@@ -134,23 +143,20 @@ Using MongoDB Atlas:
 - Pydantic
 - JWT Authentication
 
----
 
 ## Machine Learning / AI
 
 - ONNX Runtime
-- Deep Learning Classification Model
+- Deep Learning Image Classification Model
 - OpenCV
 - NumPy
 - Google Gemini AI
 
----
 
 ## Database
 
 - MongoDB Atlas
 
----
 
 ## Deployment
 
@@ -158,11 +164,12 @@ Using MongoDB Atlas:
 - Backend: Render
 - Database: MongoDB Atlas
 
+
 ---
 
 # 📁 Project Structure
 
-```
+```text
 AI-Based-Crop-Disease-Detection/
 
 │
@@ -197,7 +204,7 @@ AI-Based-Crop-Disease-Detection/
 │
 │
 ├── screenshots/
-│   ├── home.png
+│   ├── login.png
 │   ├── prediction.png
 │   └── dashboard.png
 │
@@ -208,6 +215,7 @@ AI-Based-Crop-Disease-Detection/
 ---
 
 # ⚙️ Installation Guide
+
 
 ## Clone Repository
 
@@ -235,7 +243,9 @@ Create virtual environment:
 python -m venv venv
 ```
 
+
 Activate environment:
+
 
 ### Windows
 
@@ -243,17 +253,20 @@ Activate environment:
 venv\Scripts\activate
 ```
 
+
 Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
+
 Run backend:
 
 ```bash
 uvicorn app:app --reload
 ```
+
 
 Backend runs:
 
@@ -265,11 +278,13 @@ http://127.0.0.1:8000
 
 # Frontend Setup
 
+
 Open another terminal:
 
 ```bash
 cd frontend
 ```
+
 
 Install packages:
 
@@ -277,11 +292,13 @@ Install packages:
 npm install
 ```
 
+
 Start frontend:
 
 ```bash
 npm run dev
 ```
+
 
 Frontend runs:
 
@@ -293,7 +310,9 @@ http://localhost:3000
 
 # 🔑 Environment Variables
 
-Create `.env` file inside backend:
+
+Create `.env` inside backend folder.
+
 
 ```env
 MONGO_URI=your_mongodb_connection_string
@@ -307,12 +326,14 @@ GEMINI_API_KEY=your_google_gemini_api_key
 
 # 🔌 API Endpoints
 
+
 ## Authentication
 
 | Method | Endpoint | Description |
 |---|---|---|
 | POST | `/auth/register` | Register user |
 | POST | `/auth/login` | Login user |
+
 
 ---
 
@@ -322,13 +343,15 @@ GEMINI_API_KEY=your_google_gemini_api_key
 |---|---|---|
 | POST | `/predict` | Upload image and predict disease |
 
+
 ---
 
 ## AI Advisor
 
 | Method | Endpoint | Description |
 |---|---|---|
-| POST | `/ai/explain` | Generate AI advice |
+| POST | `/ai/explain` | Generate AI disease advice |
+
 
 ---
 
@@ -345,7 +368,8 @@ GEMINI_API_KEY=your_google_gemini_api_key
 
 # 🔐 JWT Protected Routes
 
-The following APIs require authentication:
+
+Protected APIs:
 
 ```
 POST /predict
@@ -357,15 +381,17 @@ PUT /predictions/{id}
 DELETE /predictions/{id}
 ```
 
-Authorization:
+
+Authorization Header:
 
 ```
-Bearer <JWT_TOKEN>
+Authorization: Bearer <JWT_TOKEN>
 ```
 
 ---
 
 # 🏗 Application Workflow
+
 
 ```
 User
@@ -376,7 +402,7 @@ Next.js Frontend
 (Vercel)
  |
  |
-Axios API Request
+Axios REST API
  |
  |
 V
@@ -396,12 +422,13 @@ Google Gemini AI
  |
  |
 V
-Treatment and Prevention Advice
+Treatment & Prevention Advice
 ```
 
 ---
 
 # 🌐 Deployment Details
+
 
 ## Frontend
 
@@ -423,6 +450,7 @@ URL:
 https://ai-based-crop-disease-detection-1okxdgbje-tbi4.vercel.app/
 ```
 
+
 ---
 
 ## Backend
@@ -439,11 +467,13 @@ Technology:
 FastAPI + Python
 ```
 
+
 URL:
 
 ```
 https://ai-based-crop-disease-detection-3.onrender.com/
 ```
+
 
 ---
 
@@ -455,37 +485,45 @@ Platform:
 MongoDB Atlas
 ```
 
+
 ---
 
 # 🌍 CORS Configuration
 
+
 Backend supports:
 
-Local development:
+
+Local Development:
 
 ```
 http://localhost:3000
 ```
 
-Vercel deployment:
+
+Vercel Deployment:
 
 ```
 https://*.vercel.app
 ```
 
+
 ---
 
 # ⚠️ Known Limitations
 
+
 - Backend is deployed on Render Free Tier.
-- Service may sleep after inactivity.
+- Server may sleep after inactivity.
 - First request after sleep may take extra time.
-- Gemini AI requires internet connectivity.
-- Prediction accuracy depends on image quality.
+- Gemini AI requires internet connection.
+- Prediction accuracy depends on uploaded image quality.
+
 
 ---
 
 # 🚀 Future Enhancements
+
 
 - Mobile application
 - Live camera disease detection
@@ -495,28 +533,35 @@ https://*.vercel.app
 - Advanced analytics dashboard
 - Smart farming recommendations
 
+
 ---
 
 # 👨‍💻 Author
+
 
 **Anshul**
 
 MCA Student  
 Graphic Era University
 
+
 GitHub:
 
 https://github.com/anshulmall06
+
 
 ---
 
 # 📄 License
 
+
 This project was developed for educational and internship purposes.
+
 
 ---
 
 # 🙏 Acknowledgements
+
 
 - FastAPI
 - Next.js
