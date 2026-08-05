@@ -1,6 +1,8 @@
 # 🌱 AI Based Crop Disease Detection System
 
-An AI-powered web application that helps farmers identify crop diseases by uploading images of plant leaves. The system predicts crop diseases, displays confidence scores, stores prediction history, and generates treatment and prevention recommendations using **Google Gemini AI**.
+An AI-powered full-stack web application that helps farmers identify crop diseases by uploading images of plant leaves.
+
+The system uses a Deep Learning image classification model with **ONNX Runtime** to predict crop diseases, provides confidence scores, stores prediction history, and generates disease explanation and treatment recommendations using **Google Gemini AI**.
 
 ---
 
@@ -22,21 +24,52 @@ https://ai-based-crop-disease-detection-3.onrender.com/docs
 
 # 📸 Features
 
-- 🌿 Upload crop leaf images
-- 🤖 AI-powered crop disease prediction
-- 📊 Confidence score display
-- 🧠 Google Gemini AI crop advisor
-- 💊 Disease description
-- 🌱 Treatment recommendations
-- 🛡 Prevention methods
-- 👨‍🌾 Farmer tips
-- 🔐 JWT Authentication
-- 👤 User Registration & Login
-- 📜 Prediction History (CRUD)
-- 📈 Dashboard
-- 💾 MongoDB Atlas integration
-- 🌍 Responsive UI
-- ⚡ FastAPI REST APIs
+## 🌿 Crop Disease Detection
+
+* Upload crop leaf images
+* AI-based disease prediction
+* Confidence score calculation
+* Plant disease classification using Deep Learning model
+
+## 🤖 AI Crop Advisor
+
+* Disease explanation
+* Causes of disease
+* Treatment recommendations
+* Prevention methods
+* Farmer tips using Google Gemini AI
+
+## 🔐 Authentication System
+
+* User registration
+* Secure login
+* JWT authentication
+* Protected API routes
+
+## 📊 Dashboard
+
+* Total predictions count
+* Average confidence score
+* Latest prediction
+* Prediction history management
+
+## 📜 Prediction History
+
+* View previous predictions
+* Update prediction records
+* Delete prediction records
+
+## 💾 Database
+
+* MongoDB Atlas integration
+* User data storage
+* Prediction history storage
+
+## 🌍 User Experience
+
+* Responsive UI
+* English/Hindi language support
+* Modern dashboard interface
 
 ---
 
@@ -44,38 +77,50 @@ https://ai-based-crop-disease-detection-3.onrender.com/docs
 
 ## Frontend
 
-- Next.js
-- React
-- JavaScript
-- HTML5
-- CSS3
-- Axios
+* Next.js
+* React.js
+* JavaScript
+* HTML5
+* CSS3
+* Tailwind CSS
+* Axios
 
 ## Backend
 
-- FastAPI
-- Python
-- Uvicorn
-- JWT Authentication
-- Pydantic
+* FastAPI
+* Python
+* Uvicorn
+* Pydantic
+* JWT Authentication
 
 ## Database
 
-- MongoDB Atlas
+* MongoDB Atlas
 
 ## Artificial Intelligence
 
-- Google Gemini AI
-- Machine Learning Disease Prediction
+* ONNX Runtime
+* Deep Learning Image Classification Model
+* OpenCV
+* NumPy
+* Google Gemini AI
+
+## Deployment
+
+* Frontend: Vercel
+* Backend: Render
+* Database: MongoDB Atlas
 
 ---
 
 # 📁 Project Structure
 
-```text
+```
 AI-Based-Crop-Disease-Detection/
+
 │
 ├── backend/
+│
 │   ├── controllers/
 │   ├── database/
 │   ├── middleware/
@@ -83,11 +128,20 @@ AI-Based-Crop-Disease-Detection/
 │   ├── routes/
 │   ├── schemas/
 │   ├── services/
+│   │
+│   ├── ml/
+│   │   ├── model.onnx
+│   │   ├── model.onnx.data
+│   │   ├── classes.json
+│   │   └── predictor.py
+│   │
 │   ├── app.py
 │   ├── requirements.txt
 │   └── .env
 │
+│
 ├── frontend/
+│
 │   ├── app/
 │   ├── components/
 │   ├── lib/
@@ -95,8 +149,9 @@ AI-Based-Crop-Disease-Detection/
 │   ├── package.json
 │   └── next.config.ts
 │
-├── dataset/
-├── notebooks/
+│
+├── screenshots/
+│
 ├── README.md
 └── .gitignore
 ```
@@ -107,7 +162,6 @@ AI-Based-Crop-Disease-Detection/
 
 ## Clone Repository
 
-
 ```bash
 git clone https://github.com/anshulmall06/AI-Based-Crop-Disease-Detection.git
 ```
@@ -116,13 +170,23 @@ git clone https://github.com/anshulmall06/AI-Based-Crop-Disease-Detection.git
 cd AI-Based-Crop-Disease-Detection
 ```
 
+---
+
 # Backend Setup
+
+Move into backend folder:
 
 ```bash
 cd backend
+```
 
+Create virtual environment:
+
+```bash
 python -m venv venv
 ```
+
+Activate environment:
 
 ### Windows
 
@@ -130,19 +194,19 @@ python -m venv venv
 venv\Scripts\activate
 ```
 
-### Install Dependencies
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Run Backend
+Run backend:
 
 ```bash
 uvicorn app:app --reload
 ```
 
-Backend runs at:
+Backend runs on:
 
 ```
 http://127.0.0.1:8000
@@ -152,15 +216,25 @@ http://127.0.0.1:8000
 
 # Frontend Setup
 
+Open another terminal:
+
 ```bash
 cd frontend
+```
 
+Install packages:
+
+```bash
 npm install
+```
 
+Run frontend:
+
+```bash
 npm run dev
 ```
 
-Frontend runs at:
+Frontend runs on:
 
 ```
 http://localhost:3000
@@ -168,9 +242,9 @@ http://localhost:3000
 
 ---
 
-# Environment Variables
+# 🔑 Environment Variables
 
-Create a `.env` file inside the **backend** folder.
+Create `.env` file inside backend folder.
 
 ```env
 MONGO_URI=your_mongodb_connection_string
@@ -182,141 +256,215 @@ GEMINI_API_KEY=your_google_gemini_api_key
 
 ---
 
-# API Endpoints
+# 🔌 API Endpoints
 
 ## Authentication
 
-| Method | Endpoint | Description |
-|---------|----------|-------------|
-| POST | `/auth/register` | Register User |
-| POST | `/auth/login` | Login User |
+| Method | Endpoint         | Description   |
+| ------ | ---------------- | ------------- |
+| POST   | `/auth/register` | Register user |
+| POST   | `/auth/login`    | Login user    |
 
 ---
 
 ## Disease Prediction
 
-| Method | Endpoint | Description |
-|---------|----------|-------------|
-| POST | `/predict` | Predict Crop Disease |
+| Method | Endpoint   | Description                      |
+| ------ | ---------- | -------------------------------- |
+| POST   | `/predict` | Upload image and predict disease |
 
 ---
 
-## AI Crop Advisor
+## AI Advisor
 
-| Method | Endpoint | Description |
-|---------|----------|-------------|
-| POST | `/ai/explain` | Generate AI Advice using Gemini |
+| Method | Endpoint      | Description                |
+| ------ | ------------- | -------------------------- |
+| POST   | `/ai/explain` | Generate AI disease advice |
 
 ---
 
 ## Prediction History
 
-| Method | Endpoint | Description |
-|---------|----------|-------------|
-| GET | `/predictions` | Get All Predictions |
-| GET | `/predictions/{id}` | Get Prediction by ID |
-| PUT | `/predictions/{id}` | Update Prediction |
-| DELETE | `/predictions/{id}` | Delete Prediction |
+| Method | Endpoint            | Description            |
+| ------ | ------------------- | ---------------------- |
+| GET    | `/predictions`      | Get all predictions    |
+| GET    | `/predictions/{id}` | Get prediction details |
+| PUT    | `/predictions/{id}` | Update prediction      |
+| DELETE | `/predictions/{id}` | Delete prediction      |
 
 ---
 
-# Application Workflow
+# 🔐 Protected APIs
 
-1. Register a new account.
-2. Login securely using JWT Authentication.
-3. Upload a crop leaf image.
-4. AI predicts the crop disease.
-5. Confidence score is displayed.
-6. Click **Get AI Advice**.
-7. Google Gemini AI generates:
-   - Disease Description
-   - Causes
-   - Treatment
-   - Prevention
-   - Farmer Tips
-8. Prediction is saved to MongoDB.
-9. View previous predictions in History and Dashboard.
+JWT authentication is required for:
+
+```
+POST /predict
+
+GET /predictions
+
+PUT /predictions/{id}
+
+DELETE /predictions/{id}
+```
+
+Authorization header:
+
+```
+Authorization: Bearer <JWT_TOKEN>
+```
+
+---
+
+# 🏗 Application Workflow
+
+```
+User
+ |
+ |
+V
+Next.js Frontend (Vercel)
+ |
+ |
+Axios REST API
+ |
+ |
+V
+FastAPI Backend (Render)
+ |
+ |
+ +----------------+
+ |                |
+ V                V
+ONNX Model     MongoDB Atlas
+Prediction     Database
+ |
+ |
+V
+Google Gemini AI
+ |
+ |
+V
+Treatment & Prevention Advice
+```
 
 ---
 
 # 🌐 Deployment
 
-## Live Frontend
-
-**Platform:** Vercel
-
-https://ai-based-crop-disease-detection-drab.vercel.app/
-
----
-
-## Live Backend
-
-**Platform:** Render
-
-https://ai-based-crop-disease-detection-3.onrender.com
-
----
-
-## API Documentation
-
-https://ai-based-crop-disease-detection-3.onrender.com/docs
-
----
-
-# 📋 Deployment Summary
-
 ## Frontend
 
-- Vercel
-- Next.js
-- React
-- JavaScript
+Platform:
+
+```
+Vercel
+```
+
+Technology:
+
+```
+Next.js + React
+```
+
+URL:
+
+```
+https://ai-based-crop-disease-detection-1okxdgbje-tbi4.vercel.app/
+```
+
+---
 
 ## Backend
 
-- Render
-- FastAPI
-- Python
+Platform:
 
-## Database
+```
+Render
+```
 
-- MongoDB Atlas
+Technology:
 
-## AI Service
+```
+FastAPI + Python
+```
 
-- Google Gemini AI
+URL:
+
+```
+https://ai-based-crop-disease-detection-3.onrender.com/
+```
 
 ---
 
-# ⚠️ Known Limitations (Free Tier)
+## Database
 
-- The backend is deployed on the **Render Free Tier**.
-- After approximately **15 minutes of inactivity**, Render may automatically put the backend service to sleep.
-- The **first request after inactivity** may take **30–60 seconds** while the server wakes up.
-- Once the backend is active, all application features work normally.
-- AI advice requires an active internet connection to communicate with Google Gemini AI.
+Platform:
+
+```
+MongoDB Atlas
+```
+
+---
+
+# 🌍 CORS Configuration
+
+The backend supports:
+
+* Local development
+
+```
+http://localhost:3000
+```
+
+* Vercel deployments
+
+```
+https://*.vercel.app
+```
+
+---
+
+# 📸 Screenshots
+
+Add application screenshots here:
+
+```
+screenshots/
+
+├── home.png
+├── prediction.png
+└── dashboard.png
+```
+
+---
+
+# ⚠️ Known Limitations
+
+* Backend uses Render Free Tier.
+* Service may sleep after inactivity.
+* First request after inactivity may take additional time.
+* Gemini AI requires internet connectivity.
+* Disease prediction accuracy depends on image quality.
 
 ---
 
 # 🚀 Future Enhancements
 
-- 📱 Mobile Application
-- 🌍 Multi-language Support
-- 📷 Live Camera Disease Detection
-- 📈 Analytics Dashboard
-- 🌾 Support for More Crop Species
-- ☁ Cloud Storage Integration
-- 🔔 Disease Alert Notifications
+* Mobile application
+* Live camera disease detection
+* More crop categories
+* Cloud image storage
+* Disease alert notifications
+* Advanced analytics dashboard
+* Farmer recommendation system
 
 ---
-
 
 # 👨‍💻 Author
 
 **Anshul**
 
 MCA Student
-
 Graphic Era University
 
 GitHub:
@@ -333,10 +481,12 @@ This project was developed for educational and internship purposes.
 
 # 🙏 Acknowledgements
 
-- FastAPI
-- Next.js
-- MongoDB Atlas
-- Google Gemini AI
-- Render
-- Vercel
-- Axios
+* FastAPI
+* Next.js
+* MongoDB Atlas
+* Google Gemini AI
+* ONNX Runtime
+* OpenCV
+* Render
+* Vercel
+* Axios
