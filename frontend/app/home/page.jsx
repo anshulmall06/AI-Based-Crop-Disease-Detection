@@ -1,8 +1,7 @@
 "use client";
 import AIAdvice from "../../components/AIAdvice";
 import { useState } from "react";
-import axios from "axios";
-
+import api from "../../lib/api";
 export default function Home() {
   const [language, setLanguage] = useState("en");
   const [file, setFile] = useState(null);
@@ -58,49 +57,42 @@ export default function Home() {
   const t = translations[language];
 
   const handlePredict = async () => {
-  if (!file) {
-    alert("Please select an image first");
-    return;
-  }
-
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-    alert("Please login first.");
-    return;
-  }
-
-  const formData = new FormData();
-  formData.append("file", file);
-
-  try {
-    setLoading(true);
-
-    const response = await axios.post(
-      "https://ai-based-crop-disease-detection-3.onrender.com/predict",
-      formData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    console.log(response.data);
-    setResult(response.data);
-
-  } catch (error) {
-    console.error(error);
-
-    if (error.response) {
-      alert(error.response.data.detail);
-    } else {
-      alert("Prediction failed.");
+    if (!file) {
+      alert("Please select an image first");
+      return;
     }
-  } finally {
-    setLoading(false);
-  }
-};
+
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      setLoading(true);
+
+      const response = await api.post(
+        "/predict",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log(response.data);
+      setResult(response.data);
+
+    } catch (error) {
+      console.error(error);
+
+      if (error.response) {
+        alert(error.response.data.detail);
+      } else {
+        alert("Prediction failed.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="min-h-screen bg-gray-100">
 
@@ -149,47 +141,47 @@ export default function Home() {
 
         <div className="space-y-3">
           {result ? (
-  <>
-    <>
-  <p>
-    <strong>{t.disease}:</strong> {result.disease}
-  </p>
+            <>
+              <>
+                <p>
+                  <strong>{t.disease}:</strong> {result.disease}
+                </p>
 
-  <p>
-    <strong>{t.confidence}:</strong> {result.confidence}%
-  </p>
+                <p>
+                  <strong>{t.confidence}:</strong> {result.confidence}%
+                </p>
 
-  <p>
-    <strong>{t.description}:</strong>{" "}
-    Detected disease in uploaded crop leaf.
-  </p>
+                <p>
+                  <strong>{t.description}:</strong>{" "}
+                  Detected disease in uploaded crop leaf.
+                </p>
 
-  <p>
-    <strong>{t.treatment}:</strong>{" "}
-    Apply recommended fungicide and monitor crop health.
-  </p>
+                <p>
+                  <strong>{t.treatment}:</strong>{" "}
+                  Apply recommended fungicide and monitor crop health.
+                </p>
 
-  <p>
-    <strong>{t.prevention}:</strong>{" "}
-    Maintain proper irrigation and crop hygiene.
-  </p>
+                <p>
+                  <strong>{t.prevention}:</strong>{" "}
+                  Maintain proper irrigation and crop hygiene.
+                </p>
 
-  {/* Check if AIAdvice is rendering */}
-  <div className="mt-6 border-2 border-red-500 p-4 rounded-lg">
-    <p className="text-red-600 font-bold text-xl mb-3">
-      AI Advice Component Below
-    </p>
+                {/* Check if AIAdvice is rendering */}
+                <div className="mt-6 border-2 border-red-500 p-4 rounded-lg">
+                  <p className="text-red-600 font-bold text-xl mb-3">
+                    AI Advice Component Below
+                  </p>
 
-   <AIAdvice
-  disease={result.disease}
-  confidence={result.confidence}
-/>
-  </div>
-</>
-  </>
-) : (
-  <p>No prediction yet.</p>
-)}
+                  <AIAdvice
+                    disease={result.disease}
+                    confidence={result.confidence}
+                  />
+                </div>
+              </>
+            </>
+          ) : (
+            <p>No prediction yet.</p>
+          )}
         </div>
       </div>
 
@@ -229,22 +221,20 @@ export default function Home() {
       <div className="flex justify-center gap-4 py-10">
         <button
           onClick={() => setLanguage("en")}
-          className={`px-6 py-3 rounded-full font-semibold ${
-            language === "en"
+          className={`px-6 py-3 rounded-full font-semibold ${language === "en"
               ? "bg-blue-600 text-white"
               : "bg-gray-200"
-          }`}
+            }`}
         >
           English
         </button>
 
         <button
           onClick={() => setLanguage("hi")}
-          className={`px-6 py-3 rounded-full font-semibold ${
-            language === "hi"
+          className={`px-6 py-3 rounded-full font-semibold ${language === "hi"
               ? "bg-orange-500 text-white"
               : "bg-gray-200"
-          }`}
+            }`}
         >
           हिन्दी
         </button>
