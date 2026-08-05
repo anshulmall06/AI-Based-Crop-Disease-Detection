@@ -58,39 +58,49 @@ export default function Home() {
   const t = translations[language];
 
   const handlePredict = async () => {
-    if (!file) {
-      alert("Please select an image first");
-      return;
+  if (!file) {
+    alert("Please select an image first");
+    return;
+  }
+
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    alert("Please login first.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    setLoading(true);
+
+    const response = await axios.post(
+      "https://ai-based-crop-disease-detection-3.onrender.com/predict",
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    console.log(response.data);
+    setResult(response.data);
+
+  } catch (error) {
+    console.error(error);
+
+    if (error.response) {
+      alert(error.response.data.detail);
+    } else {
+      alert("Prediction failed.");
     }
-  const getAIExplanation = async (diseaseName) => {
-    
-}
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      setLoading(true);
-
-      const response = await axios.post(
-        "http://127.0.0.1:8000/predict",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      console.log("Prediction Response:", response.data);
-      setResult(response.data);
-    } catch (error) {
-      console.error(error);
-      alert("Prediction failed. Make sure the backend is running.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className="min-h-screen bg-gray-100">
 

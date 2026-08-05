@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
+﻿from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
 from database.database import prediction_collection
 from middleware.auth_middleware import verify_token
 
