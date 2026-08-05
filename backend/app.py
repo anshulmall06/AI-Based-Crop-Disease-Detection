@@ -13,6 +13,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
+        "https://ai-based-crop-disease-detection-2xh7jr4m1-tbi4.vercel.app",
         "https://ai-based-crop-disease-detection-git-main-tbi4.vercel.app",
         "http://localhost:3000"
     ],
@@ -20,7 +21,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 app.include_router(auth_router)
 app.include_router(predict_router)
 app.include_router(history_router)
