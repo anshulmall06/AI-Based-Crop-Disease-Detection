@@ -50,11 +50,11 @@ def predict(image_path):
 
     output = outputs[0]
 
- output = output - np.max(output)
+    output = output - np.max(output)
 
-exp_scores = np.exp(output)
+    exp_scores = np.exp(output)
 
-probabilities = exp_scores / np.sum(exp_scores)
+    probabilities = exp_scores / np.sum(exp_scores)
 
     index = np.argmax(probabilities)
 
