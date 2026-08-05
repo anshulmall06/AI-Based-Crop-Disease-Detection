@@ -12,9 +12,15 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
+    app.add_middleware(
+    CORSMiddleware,
     allow_origins=[
-        https://ai-based-crop-disease-detection-git-main-tbi4.vercel.app/
+        "https://ai-based-crop-disease-detection-git-main-tbi4.vercel.app",
+        "https://ai-based-crop-disease-detection-2xh7jr4m1-tbi4.vercel.app",
+        "http://localhost:3000"
     ],
+   
+)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
