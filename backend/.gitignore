@@ -1,12 +1,76 @@
-# Ignore dataset folder outside backend
-/dataset/
-
-# Ignore virtual environment
-/ml_env/
-
-# Python cache
+# ==========================
+# Python
+# ==========================
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
 
-# Environment variables
+# ==========================
+# Virtual Environments
+# ==========================
+venv/
+venv311/
+env/
+.venv/
+
+# ==========================
+# Environment Variables
+# ==========================
 .env
+
+# ==========================
+# IDE
+# ==========================
+.vscode/
+.idea/
+
+# ==========================
+# OS Files
+# ==========================
+.DS_Store
+Thumbs.db
+
+# ==========================
+# Logs
+# ==========================
+*.log
+
+# ==========================
+# Dataset (Training Only)
+# ==========================
+dataset/
+dataset_split/
+
+# ==========================
+# PyTorch Training Model
+# ==========================
+ml/best_model.pth
+
+# ==========================
+# Uploaded Images
+# ==========================
+uploads/*
+
+# Keep uploads folder in Git
+!uploads/.gitkeep
+
+# ==========================
+# Test Files
+# ==========================
+test.py
+test_model.py
+test_mongo.py
+
+# ==========================
+# Cache
+# ==========================
+.pytest_cache/
+.mypy_cache/
+
+# ==========================
+# Build
+# ==========================
+build/
+dist/
