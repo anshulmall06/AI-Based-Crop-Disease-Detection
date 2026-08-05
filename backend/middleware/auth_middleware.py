@@ -1,4 +1,5 @@
-from fastapi import Header, HTTPException
+from fastapi import Depends, HTTPException
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import jwt, JWTError
 from dotenv import load_dotenv
 import os
@@ -8,16 +9,13 @@ load_dotenv()
 SECRET_KEY = os.getenv("JWT_SECRET")
 ALGORITHM = "HS256"
 
+security = HTTPBearer()
 
-def verify_token(authorization: str = Header(...)):
 
-    if not authorization.startswith("Bearer "):
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid Authorization Header"
-        )
-
-    token = authorization.split(" ")[1]
+def verify_token(
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    token = credentials.credentials
 
     try:
         payload = jwt.decode(
@@ -25,7 +23,6 @@ def verify_token(authorization: str = Header(...)):
             SECRET_KEY,
             algorithms=[ALGORITHM]
         )
-
         return payload
 
     except JWTError:
