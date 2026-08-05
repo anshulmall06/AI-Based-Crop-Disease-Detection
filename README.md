@@ -8,11 +8,11 @@ An AI-powered web application that helps farmers identify crop diseases by uploa
 
 ## 🌐 Frontend (Vercel)
 
-https://ai-based-crop-disease-detection-drab.vercel.app/
+https://ai-based-crop-disease-detection-1okxdgbje-tbi4.vercel.app/
 
 ## ⚙️ Backend API (Render)
 
-https://ai-based-crop-disease-detection-3.onrender.com
+https://ai-based-crop-disease-detection-3.onrender.com/
 
 ## 📖 API Documentation (Swagger)
 
