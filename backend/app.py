@@ -12,13 +12,18 @@ app = FastAPI(
 )
 
 
-# CORS configuration for Vercel + Local development
+# CORS configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"https://ai-based-crop-disease-detection-.*-tbi4\.vercel\.app",
+
+    # Accept all Vercel preview deployments
+    allow_origin_regex=r"https://ai-based-crop-disease-detection-[a-z0-9]+-tbi4\.vercel\.app",
+
+    # Local development
     allow_origins=[
         "http://localhost:3000"
     ],
+
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -27,11 +32,8 @@ app.add_middleware(
 
 # Routes
 app.include_router(auth_router)
-
 app.include_router(predict_router)
-
 app.include_router(history_router)
-
 app.include_router(ai_router)
 
 
