@@ -6,39 +6,42 @@ from routes.auth import router as auth_router
 from routes.history import router as history_router
 from routes.ai import router as ai_router
 
-
 app = FastAPI(
     title="AI Crop Disease Detection API"
 )
 
+# Allowed Frontend Origins
+origins = [
+    "http://localhost:3000",
+    "https://ai-based-crop-disease-detection-drab.vercel.app",
+]
 
-# CORS configuration
 app.add_middleware(
     CORSMiddleware,
+    allow_origins=origins,
 
-    # Accept all Vercel preview deployments
-    allow_origin_regex=r"https://ai-based-crop-disease-detection-[a-z0-9]+-tbi4\.vercel\.app",
-
-    # Local development
-    allow_origins=[
-        "http://localhost:3000"
-    ],
+    # Allow all Vercel deployments (production + preview)
+    allow_origin_regex=r"https://ai-based-crop-disease-detection.*\.vercel\.app",
 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
-# Routes
+# Register Routes
 app.include_router(auth_router)
 app.include_router(predict_router)
 app.include_router(history_router)
 app.include_router(ai_router)
 
-
-@app.api_route("/", methods=["GET", "HEAD"])
+@app.get("/")
 def home():
     return {
         "message": "AI Crop Disease Detection API Running Successfully"
+    }
+
+@app.get("/health")
+def health():
+    return {
+        "status": "healthy"
     }
