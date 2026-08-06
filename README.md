@@ -1,4 +1,4 @@
-# 🌱 AI Based Crop Disease Detection System
+# 🌱 AI-Based Crop Disease Detection System
 
 An AI-powered full-stack web application that helps farmers identify crop diseases by uploading plant leaf images.
 
@@ -25,6 +25,31 @@ https://ai-based-crop-disease-detection-3.onrender.com/
 https://ai-based-crop-disease-detection-3.onrender.com/docs
 
 ---
+
+# 🎯 Project Objective
+
+The objective of this project is to develop an AI-based crop disease detection system that helps users identify plant diseases at an early stage using leaf image analysis.
+
+The system aims to:
+
+- Reduce manual disease identification efforts
+- Provide quick disease prediction using Deep Learning
+- Generate AI-based treatment and prevention guidance
+- Maintain user prediction history for better monitoring
+
+---
+
+
+# 🔑 Demo Account
+
+---
+Use the following credentials to test the application:
+
+**Email:** anshulsingh1234@gmail.com
+**Password:** anshulsingh1234
+
+---
+
 
 # 📸 Application Screenshots
 
@@ -56,7 +81,7 @@ https://ai-based-crop-disease-detection-3.onrender.com/docs
 - ONNX Runtime based model inference
 - Display predicted disease name
 - Display prediction confidence percentage
-
+- Support image-based crop disease analysis
 
 ---
 
@@ -70,6 +95,7 @@ Integrated with Google Gemini AI to provide:
 - Prevention methods
 - Farmer-friendly guidance
 
+The Deep Learning model identifies the crop disease, and Gemini AI generates human-readable explanations, treatment suggestions, and prevention methods based on the prediction.
 
 ---
 
@@ -118,6 +144,19 @@ Users can:
 
 ---
 
+# 📚 Dataset
+
+
+The Deep Learning model is trained on plant leaf image datasets containing multiple crop disease categories.
+
+The dataset contains images of different crops and their corresponding disease classes. The model learns visual patterns such as leaf spots, discoloration, and disease symptoms to classify crop diseases.
+
+The dataset may contain different numbers of images for different crop classes, which can affect model performance across categories.
+
+
+---
+
+
 # 🛠 Technology Stack
 
 
@@ -143,7 +182,7 @@ Users can:
 
 ## Machine Learning / AI
 
-- Deep Learning Image Classification
+- Deep Learning Based Image Classification
 - ONNX Runtime
 - OpenCV
 - NumPy
@@ -207,6 +246,19 @@ Users can:
 ```
 
 ---
+
+# 🔄 Model Workflow
+
+1. User uploads a crop leaf image.
+2. Image is processed and prepared for model inference.
+3. ONNX Runtime loads the Deep Learning classification model.
+4. The model predicts the crop disease class with confidence score.
+5. Prediction result is stored in MongoDB.
+6. Google Gemini AI generates disease explanation, treatment, and prevention recommendations.
+
+---
+
+
 
 # 📁 Project Structure
 
@@ -517,12 +569,14 @@ MongoDB Atlas
 
 # ⚠️ Limitations
 
-## ⚠️ Limitations
 
-* The model performance depends on the quality and distribution of the training dataset. Some crop classes may have more training samples than others, which can cause the model to perform better on those classes.
-* Predictions may vary for images with poor lighting, complex backgrounds, unclear leaf patterns, or images from unseen crop varieties.
-* The current model supports only the crop and disease classes included in the training dataset. It may not accurately identify diseases from unsupported crops.
-* Future improvements include expanding the dataset, applying class balancing techniques, adding more crop categories, and improving model accuracy through advanced training strategies.
+- The model performance depends on the quality, diversity, and balance of the training dataset. Classes with more training samples may achieve better recognition compared to classes with fewer samples.
+
+- Predictions may vary for images with poor lighting, complex backgrounds, unclear leaf patterns, or images from unseen crop varieties.
+
+- The current model supports only the crop and disease classes included in the training dataset. It may not accurately identify diseases from unsupported crops.
+
+- Future improvements include expanding the dataset, applying class balancing techniques, adding more crop categories, and improving model accuracy through advanced training strategies.
 
 
 
