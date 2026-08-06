@@ -517,11 +517,13 @@ MongoDB Atlas
 
 # ⚠️ Limitations
 
+## ⚠️ Limitations
 
-- Prediction accuracy depends on image quality
-- Render free tier may cause initial loading delay
-- Gemini AI requires internet connectivity
-- Currently supports limited crop disease categories
+* The model performance depends on the quality and distribution of the training dataset. Some crop classes may have more training samples than others, which can cause the model to perform better on those classes.
+* Predictions may vary for images with poor lighting, complex backgrounds, unclear leaf patterns, or images from unseen crop varieties.
+* The current model supports only the crop and disease classes included in the training dataset. It may not accurately identify diseases from unsupported crops.
+* Future improvements include expanding the dataset, applying class balancing techniques, adding more crop categories, and improving model accuracy through advanced training strategies.
+
 
 
 ---
