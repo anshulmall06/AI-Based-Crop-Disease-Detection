@@ -85,6 +85,20 @@ Use the following credentials to test the application:
 
 ---
 
+## Important Usage Note
+
+To use the crop disease prediction feature correctly, please follow this flow:
+
+1. First, create an account and **Login**.
+2. After successful login, upload the crop/plant image.
+3. Click on **Predict Disease** to get the prediction result.
+4. The prediction history and disease details will then be saved and displayed on your dashboard.
+
+⚠️ Please login before making predictions. If you predict a disease without logging in and then login later, that prediction may not appear on the dashboard because it is not linked with your user account.
+
+---
+
+
 ## 🤖 AI Crop Advisor
 
 Integrated with Google Gemini AI to provide:
