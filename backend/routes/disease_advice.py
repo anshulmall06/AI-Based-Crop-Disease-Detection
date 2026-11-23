@@ -11,7 +11,7 @@ def get_local_advice(disease: str, confidence=None):
     advice_database = {
 
         # TOMATO EARLY BLIGHT
-        "Tomato early blight": {
+        "tomato early blight": {
             "description": "Tomato Early Blight is a fungal disease caused by Alternaria solani. It commonly affects leaves, stems and sometimes fruits. The disease usually begins on older leaves and can reduce plant health and fruit production if not managed properly.",
 
             "symptoms": "Dark brown circular spots with characteristic concentric rings may develop on older leaves. Yellow areas often surround the spots. As the disease progresses, affected leaves may turn yellow, dry and fall prematurely.",
@@ -27,7 +27,7 @@ def get_local_advice(disease: str, confidence=None):
 
 
         # TOMATO LATE BLIGHT
-        "Tomato late blight": {
+        "tomato late blight": {
             "description": "Tomato Late Blight is a destructive disease caused by the oomycete pathogen Phytophthora infestans. It affects tomato leaves, stems and fruits and can spread rapidly during cool, humid and wet weather. Severe infections can damage the entire plant and cause significant crop losses.",
 
             "symptoms": "The disease initially produces irregular, water-soaked, pale green or dark brown patches on leaves. These patches may enlarge rapidly and turn brown or black. Under humid conditions, white cotton-like growth may appear around the edges of infected areas on the underside of leaves. Dark lesions may also develop on stems, while fruits can develop large, firm, brown or greasy-looking patches.",
@@ -43,7 +43,7 @@ def get_local_advice(disease: str, confidence=None):
 
 
         # POTATO EARLY BLIGHT
-        "Potato early blight": {
+        "potato early blight": {
             "description": "Potato Early Blight is a fungal disease caused by Alternaria solani. It mainly affects potato leaves but can also affect stems and tubers. The disease is more common under warm conditions and can reduce the plant's ability to produce healthy tubers.",
 
             "symptoms": "Small dark brown spots generally appear on older leaves. These spots may develop concentric rings resembling a target pattern and are often surrounded by yellow areas. Severely affected leaves gradually turn yellow, dry and fall.",
@@ -59,7 +59,7 @@ def get_local_advice(disease: str, confidence=None):
 
 
         # POTATO LATE BLIGHT
-        "Potato late blight": {
+        "potato late blight": {
             "description": "Potato Late Blight is a destructive disease caused by Phytophthora infestans. It primarily affects potato leaves, stems and tubers. The disease can spread rapidly under cool and humid weather conditions and may cause significant crop losses if not managed early.",
 
             "symptoms": "Initial symptoms include irregular, water-soaked, pale green or dark brown patches on leaves. Under moist conditions, white cotton-like growth may develop around the edges of infected areas on the underside of leaves. Infected leaves gradually turn brown, wilt and decay. Dark or discolored lesions may also develop on potato tubers.",
@@ -75,7 +75,7 @@ def get_local_advice(disease: str, confidence=None):
 
 
         # TOMATO HEALTHY
-        "Tomato healthy": {
+        "tomato healthy": {
             "description": "The AI-based crop disease detection system has classified the submitted tomato leaf image as Healthy. The image does not show prominent visual symptoms associated with the tomato diseases included in the model's classification categories. This indicates that the leaf appears healthy at the time of image analysis.",
 
             "symptoms": "The leaf appears generally green and structurally healthy, without obvious disease-associated spots, lesions, yellowing, wilting or visible fungal growth in the submitted image.",
@@ -91,7 +91,7 @@ def get_local_advice(disease: str, confidence=None):
 
 
         # POTATO HEALTHY
-        "Potato healthy": {
+        "potato healthy": {
             "description": "The AI-based crop disease detection system has classified the submitted potato leaf image as Healthy. No prominent visual symptoms associated with the potato diseases included in the model's classification categories were identified in the submitted image.",
 
             "symptoms": "The leaf appears generally green and healthy, without obvious dark lesions, concentric spots, unusual yellowing, wilting or visible signs of infection.",
@@ -107,7 +107,7 @@ def get_local_advice(disease: str, confidence=None):
 
 
         # PEPPER BELL HEALTHY
-        "Pepper bell healthy": {
+        "pepper bell healthy": {
             "description": "The AI-based crop disease detection system has classified the submitted bell pepper leaf image as Healthy. No prominent visual symptoms associated with the bell pepper diseases included in the model's classification categories were identified.",
 
             "symptoms": "The leaf appears generally green and healthy, without obvious bacterial spots, unusual discoloration, lesions, wilting or visible fungal growth.",
