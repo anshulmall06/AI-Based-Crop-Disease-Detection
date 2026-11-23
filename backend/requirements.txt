@@ -23,3 +23,4 @@ onnxruntime==1.28.0
 
 slowapi==0.1.9
 google-genai
+python-dotenv
