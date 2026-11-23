@@ -1,12 +1,15 @@
 
+import re
+
 def get_local_advice(disease: str, confidence=None):
 
-    disease_name = disease.replace("___", " - ").replace("_", " ")
+    # Normalize disease name
+    disease_name = re.sub(r"[_\s]+", " ", disease).strip()
     key = disease_name.lower()
 
     advice_database = {
 
-        "tomato - early blight": {
+        "tomato early blight": {
             "description": "Early blight is a fungal disease that commonly affects tomato leaves, stems and fruits.",
             "symptoms": "Brown spots with concentric rings, yellowing leaves and drying of older leaves.",
             "causes": "It is associated with the fungus Alternaria solani and spreads through infected plant material and splashing water.",
@@ -15,7 +18,7 @@ def get_local_advice(disease: str, confidence=None):
             "tips": "Monitor the crop regularly and consult an agricultural expert if symptoms spread."
         },
 
-        "potato - late blight": {
+        "potato late blight": {
             "description": "Late blight is a serious disease affecting potato and tomato plants.",
             "symptoms": "Water-soaked or dark patches may appear on leaves. White fungal-like growth may develop under humid conditions.",
             "causes": "It is caused by Phytophthora infestans and spreads rapidly in cool, humid and wet conditions.",
@@ -24,7 +27,7 @@ def get_local_advice(disease: str, confidence=None):
             "tips": "Monitor crops regularly. Confirm uncertain diagnoses with a local agriculture expert."
         },
 
-        "tomato - healthy": {
+        "tomato healthy": {
             "description": "No visible disease has been identified in the tomato leaf.",
             "symptoms": "The leaf appears healthy based on the prediction.",
             "causes": "No disease symptoms were identified by the model.",
@@ -33,13 +36,22 @@ def get_local_advice(disease: str, confidence=None):
             "tips": "Continue monitoring the crop because a model prediction cannot guarantee that the entire plant is disease-free."
         },
 
-        "potato - healthy": {
+        "potato healthy": {
             "description": "No visible disease has been identified in the potato leaf.",
             "symptoms": "The leaf appears healthy based on the prediction.",
             "causes": "No disease symptoms were identified by the model.",
             "treatment": "No disease-specific treatment is currently indicated.",
             "prevention": "Use healthy planting material and maintain proper field hygiene.",
             "tips": "Inspect plants regularly and monitor for any new symptoms."
+        },
+
+        "pepper bell healthy": {
+            "description": "The bell pepper plant appears healthy based on the leaf prediction. No visible disease has been identified.",
+            "symptoms": "The leaf appears healthy without obvious disease symptoms such as spots, discoloration or fungal growth.",
+            "causes": "No disease was identified by the prediction model.",
+            "treatment": "No disease-specific treatment is currently required. Continue normal crop care.",
+            "prevention": "Maintain proper watering, ensure good air circulation, remove weeds and use healthy planting material.",
+            "tips": "Inspect leaves regularly, monitor plant growth and maintain proper field hygiene. A healthy leaf prediction does not guarantee that the entire plant is disease-free."
         }
     }
 
@@ -67,7 +79,6 @@ def get_local_advice(disease: str, confidence=None):
     )
 
     return f"""
-
 Disease: {disease_name}{confidence_text}
 
 Description: {description}
@@ -81,7 +92,4 @@ Treatment: {treatment}
 Prevention: {prevention}
 
 Farmer Tips: {tips}
-
-Note: This is locally stored guidance, not a live AI-generated diagnosis.
-Confirm uncertain results with an agricultural expert.
 """
