@@ -8,8 +8,6 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 from google import genai
 
-from .disease_advice import get_local_advice
-
 load_dotenv()
 
 router = APIRouter()
@@ -82,48 +80,47 @@ async def explain_disease(request: DiseaseRequest):
             detail="Disease name cannot be empty"
         )
 
-    prompt = create_prompt(disease)
+    if client is None:
+        logger.error("GEMINI_API_KEY is missing")
 
-    # Try Gemini first
-    if client is not None:
-
-        models_to_try = list(dict.fromkeys([
-            PRIMARY_MODEL,
-            FALLBACK_MODEL
-        ]))
-
-        for model_name in models_to_try:
-            try:
-                logger.info("Trying Gemini model: %s", model_name)
-
-                answer = await asyncio.to_thread(
-                    generate_gemini_answer,
-                    model_name,
-                    prompt
-                )
-
-                logger.info(
-                    "Gemini response generated successfully using %s",
-                    model_name
-                )
-
-                return {"answer": answer}
-
-            except Exception as error:
-                logger.warning(
-                    "Gemini model %s failed: %s",
-                    model_name,
-                    str(error)
-                )
-
-    else:
-        logger.warning(
-            "GEMINI_API_KEY is missing. Using local disease advice."
+        raise HTTPException(
+            status_code=503,
+            detail="Gemini AI is unavailable. API key is missing."
         )
 
-    # Automatic local fallback
-    logger.info("Using local disease advice for: %s", disease)
+    prompt = create_prompt(disease)
 
-    local_answer = get_local_advice(disease)
+    models_to_try = list(dict.fromkeys([
+        PRIMARY_MODEL,
+        FALLBACK_MODEL
+    ]))
 
-    return {"answer": local_answer}
+    for model_name in models_to_try:
+        try:
+            logger.info("Trying Gemini model: %s", model_name)
+
+            answer = await asyncio.to_thread(
+                generate_gemini_answer,
+                model_name,
+                prompt
+            )
+
+            logger.info(
+                "Gemini response generated successfully using %s",
+                model_name
+            )
+
+            return {"answer": answer}
+
+        except Exception as error:
+            logger.exception(
+                "Gemini model %s failed",
+                model_name
+            )
+
+    logger.error("All configured Gemini models are unavailable")
+
+    raise HTTPException(
+        status_code=503,
+        detail="Gemini AI is temporarily unavailable. Please try again later."
+    )
