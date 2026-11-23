@@ -24,7 +24,7 @@ if not api_key:
 client = genai.Client(api_key=api_key)
 
 # Gemini model
-MODEL_NAME = "gemini-3.5-flash-lite"
+MODEL_NAME = "gemini-3.8-flash"
 
 router = APIRouter()
 
