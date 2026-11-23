@@ -1,23 +1,32 @@
+
 import os
-import google.generativeai as genai
+import logging
+
 from dotenv import load_dotenv
+from google import genai
 
 load_dotenv()
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+logger = logging.getLogger(__name__)
 
-model = genai.GenerativeModel("gemini-2.5-flash")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+client = genai.Client(api_key=GEMINI_API_KEY) if GEMINI_API_KEY else None
 
 
 def generate_crop_advice(disease, confidence):
 
+    if client is None:
+        raise ValueError("GEMINI_API_KEY is missing")
+
     prompt = f"""
-You are an agricultural expert.
+You are an agricultural disease advisory assistant.
 
 Disease: {disease}
-Confidence: {confidence}%
+Prediction Confidence: {confidence}%
 
-Provide:
+Provide advice using these headings:
+
 1. Disease Description
 2. Symptoms
 3. Causes
@@ -25,77 +34,27 @@ Provide:
 5. Prevention
 6. Recommended Fungicide/Pesticide
 7. Farmer Tips
+
+Instructions:
+- Use simple language for farmers.
+- Do not invent pesticide names or dosage.
+- Recommend only locally approved treatments.
+- Always advise following product labels.
+- Mention when expert confirmation is needed.
+- If confidence is low, clearly explain that the prediction is uncertain.
 """
 
     try:
-        response = model.generate_content(prompt)
-        return response.text
+        response = client.models.generate_content(
+            model=os.getenv("GEMINI_MODEL", "gemini-3.8-flash"),
+            contents=prompt
+        )
+
+        if not response.text or not response.text.strip():
+            raise ValueError("Gemini returned an empty response")
+
+        return response.text.strip()
 
     except Exception:
-
-        fallback = {
-            "Tomato Early Blight": """
-Disease Description:
-Early Blight is a fungal disease that attacks tomato leaves, stems and fruits.
-
-Symptoms:
-• Brown circular spots
-• Yellow leaves
-• Dry leaves
-
-Causes:
-• Humid weather
-• Poor air circulation
-• Infected crop residue
-
-Treatment:
-• Remove infected leaves.
-• Spray Mancozeb or Chlorothalonil.
-• Avoid overhead watering.
-
-Prevention:
-• Rotate crops.
-• Keep proper spacing.
-• Use healthy seeds.
-
-Recommended Fungicide:
-Mancozeb 75% WP
-
-Farmer Tips:
-Inspect plants regularly and water at the base of the plant.
-""",
-
-            "Potato Late Blight": """
-Disease Description:
-Late Blight is caused by Phytophthora infestans.
-
-Symptoms:
-• Dark brown spots
-• White fungal growth
-• Rotting tubers
-
-Treatment:
-Spray Metalaxyl + Mancozeb.
-
-Prevention:
-Use disease-free seed potatoes and avoid excess moisture.
-"""
-        }
-
-        return fallback.get(
-            disease,
-            f"""
-Disease Description:
-{disease} detected.
-
-Treatment:
-Remove infected leaves and consult your local agricultural officer.
-
-Prevention:
-Maintain field hygiene, use certified seeds, and inspect crops regularly.
-
-Farmer Tips:
-Monitor crop health weekly and apply recommended fungicides if symptoms spread.
-"""
-        )
-    
+        logger.exception("Gemini crop advice generation failed")
+        raise
