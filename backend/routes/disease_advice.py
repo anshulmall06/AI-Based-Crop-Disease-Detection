@@ -67,7 +67,6 @@ def get_local_advice(disease: str, confidence=None):
     )
 
     return f"""
-LOCAL DISEASE ADVICE (offline fallback)
 
 Disease: {disease_name}{confidence_text}
 
